@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:Poppins,sans-serif;
+background:#1c1208;
+color:white;
+text-align:center;
+margin:0;
+padding:0;
+}
+
+nav{
+background:#2e1b0f;
+padding:15px;
+}
+
+button{
+background:#c6a15b;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+}
+
+#calendarBtn{
+margin-top:20px;
+}
+
+#calendarPanel{
+position:fixed;
+top:120px;
+left:50%;
+transform:translateX(-50%);
+background:#2e1b0f;
+padding:25px;
+border-radius:12px;
+width:320px;
+display:none;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
+}
+
+#clock{
+font-size:28px;
+margin:10px 0;
+}
+
+#calendarGrid{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:6px;
+margin-top:15px;
+}
+
+.day{
+padding:8px;
+border-radius:6px;
+background:#3c2616;
+}
+
+.today{
+background:#c6a15b;
+color:black;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<h2>Focus Lab</h2>
+</nav>
+
+<button id="calendarBtn" onclick="toggleCalendar()">📅 Open Calendar</button>
+
+<div id="calendarPanel">
+
+<h3 id="dateText"></h3>
+<div id="clock"></div>
+
+<div id="calendarGrid"></div>
+
+<br>
+<button onclick="toggleCalendar()">Close</button>
+
+</div>
+
+<script>
+
+/* OPEN CLOSE */
+
+function toggleCalendar(){
+
+let panel=document.getElementById("calendarPanel");
+
+if(panel.style.display==="none" || panel.style.display===""){
+panel.style.display="block";
+buildCalendar();
+}else{
+panel.style.display="none";
+}
+
+}
+
+/* CLOCK */
+
+function updateClock(){
+
+let now=new Date();
+
+let days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+let months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+let day=days[now.getDay()];
+let month=months[now.getMonth()];
+let date=now.getDate();
+let year=now.getFullYear();
+
+document.getElementById("dateText").innerText=
+day+", "+date+" "+month+" "+year;
+
+let h=String(now.getHours()).padStart(2,"0");
+let m=String(now.getMinutes()).padStart(2,"0");
+let s=String(now.getSeconds()).padStart(2,"0");
+
+document.getElementById("clock").innerText=h+":"+m+":"+s;
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* BUILD CALENDAR */
+
+function buildCalendar(){
+
+let grid=document.getElementById("calendarGrid");
+
+grid.innerHTML="";
+
+let now=new Date();
+let year=now.getFullYear();
+let month=now.getMonth();
+
+let firstDay=new Date(year,month,1).getDay();
+let daysInMonth=new Date(year,month+1,0).getDate();
+
+for(let i=0;i<firstDay;i++){
+let empty=document.createElement("div");
+grid.appendChild(empty);
+}
+
+for(let d=1;d<=daysInMonth;d++){
+
+let div=document.createElement("div");
+div.classList.add("day");
+
+if(d===now.getDate()){
+div.classList.add("today");
+}
+
+div.innerText=d;
+
+grid.appendChild(div);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
